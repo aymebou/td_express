@@ -1,24 +1,29 @@
+'use strict';
 const DB_NAME = 'tests-express-sqlite';
 const Fs = require('fs');
 const Path = require('path');
 const Sqlite = require('sqlite3');
 
-try {
-    Fs.unlinkSync(`./${DB_NAME}`);
-}
-catch (_ign) {}
+
 
 let DB;
+
+/*
+        La DB est créée au préalable puis simplement connectée au programme.
+        Le fichier init.sql n'est même pas utilisé
+
+        Il suffit de le run au début ou alors de créer la bonne DB
+
+ */
+
 const initAll = function (name) {
 
-    DB = new Sqlite.Database(name || DB_NAME);
+        DB = new Sqlite.Database(DB_NAME);
 
-    const init = Fs.readFileSync(Path.join(process.cwd(), './database/init.sql'), 'utf-8');
-
-    DB.exec(init);
 };
 
 initAll();
 
+
+//Make the DB useable from every fils simply by typing require('db.js')
 module.exports = DB;
-module.exports.initAll = initAll;
