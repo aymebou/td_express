@@ -2,12 +2,12 @@
 const Express = require('express');
 const Joi = require('joi');
 const Celebrate = require('celebrate');
-
 const DB = require('../db.js');
-
 const router = Express.Router();
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res, next) => { //Le / ici correspond au /posts dans l'adresse url car cette fonction est connectée
+//  au /posts dans index.js
+
 
     console.log('GET /posts');
     DB.all('SELECT * FROM POSTS', (err, data) => {
@@ -30,30 +30,31 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-router.post('/', Celebrate.celebrate(
-    {
-        body: Joi.object().keys({
-            title: Joi.string().required(),
-            content: Joi.string().required()
-        })
-    }
-    ),
-    (req, res, next) => {
+router.post('/', Celebrate.celebrate({
 
-        console.log('INSERT new post ' + req.body.title);
-        DB.run('INSERT INTO POSTS (TITLE, CONTENT) VALUES (?, ?)', [req.body.title, req.body.content], (err) => {
+    //Joi is a plugin here to make sure that the input data is in correct state, managing errors without trouble.
+    //Celebrate is just an interface used for Joi
 
-            if (err) {
-                return next(err);
-            }
-            res.status(201);
-            res.end();
-        });
+    body: Joi.object().keys({
+        title: Joi.string().required(),
+        content: Joi.string().required()
+    })
+}), (req, res, next) => {
+
+    console.log('INSERT new post ' + req.body.title);
+    DB.run('INSERT INTO POSTS (TITLE, CONTENT) VALUES (?, ?)', [req.body.title, req.body.content], (err) => {
+
+        if (err) {
+            return next(err);
+        }
+        res.status(201);
+        res.end();
     });
+});
 
 router.patch('/:id', (req, res, next) => {
 
-    DB.run('UPDATE POSTS SET TITLE=?, CONTENT=? WHERE ID = ?', [req.body.title, req.body.content, req.params.id], (err) =>{
+    DB.run('UPDATE POSTS SET TITLE=?, CONTENT=? WHERE ID = ?', [req.body.title, req.body.content, req.params.id], (err) => {
 
         if (err) {
             return next(err);
