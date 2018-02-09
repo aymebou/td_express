@@ -23,16 +23,19 @@ app.use(BP.urlencoded())
 app.use('/posts', require('./routes/posts').router);
 app.use('/users', require('./routes/adduser').router);
 app.use('/bottles', require('./routes/addbottle').router);
+app.use('/', require('./routes/getters').router);
 
 app.use(require('./routes/users').router);
 
-app.listen(8080, (err) => {
+let port = 8081;
+
+app.listen(port, (err) => {
 
     if (err) {
         console.log(err);
     }
     else {
-        console.log('app listening on port 8080');
+        console.log('app listening on port '+ port);
     }
 });
 

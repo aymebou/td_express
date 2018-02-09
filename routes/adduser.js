@@ -39,17 +39,7 @@ router.post('/', Celebrate.celebrate({ // BEWARE : is is / but in the main (inde
 });
 
 
-router.get('/', (req, res, next) => {
 
-    console.log('GET /users');
-    DB.all('SELECT * FROM USERS', (err, data) => {
-
-        if (err) {
-            return next(err);
-        }
-        return res.json(data);
-    });
-});
 
 
 module.exports.router = router;
